@@ -307,7 +307,7 @@ static void init_mlme_ext_priv_value(struct adapter *padapter)
 		pmlmeext->tx_rate = IEEE80211_OFDM_RATE_6MB;
 	else
 		pmlmeext->tx_rate = IEEE80211_CCK_RATE_1MB;
-
+printk("---- WIFI DEBUG: Line 311: Setting to SCAN_DISABLE\n");
 	pmlmeext->sitesurvey_res.state = SCAN_DISABLE;
 	pmlmeext->sitesurvey_res.channel_idx = 0;
 	pmlmeext->sitesurvey_res.bss_cnt = 0;
@@ -4391,7 +4391,7 @@ void site_survey(struct adapter *padapter)
 	} else{
 
 		/* 	channel number is 0 or this channel is not valid. */
-
+printk("---- WIFI DEBUG: Line 4396: Setting to SCAN_COMPLETE\n");
 		{
 			pmlmeext->sitesurvey_res.state = SCAN_COMPLETE;
 
@@ -4420,7 +4420,7 @@ void site_survey(struct adapter *padapter)
 			rtw_hal_set_hwreg(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
 
 			report_surveydone_event(padapter);
-
+printk("---- WIFI DEBUG: Line 4425: Setting to SCAN_DISABLE\n");
 			pmlmeext->chan_scan_time = SURVEY_TO;
 			pmlmeext->sitesurvey_res.state = SCAN_DISABLE;
 
@@ -6417,8 +6417,8 @@ u8 sitesurvey_cmd_hdl(struct adapter *padapter, u8 *pbuf)
 	u8 val8;
 	u32 initialgain;
 	u32 i;
-
 	if (pmlmeext->sitesurvey_res.state == SCAN_DISABLE) {
+printk("---- WIFI DEBUG: Line 6422: Setting to SCAN_START\n");
 		pmlmeext->sitesurvey_res.state = SCAN_START;
 		pmlmeext->sitesurvey_res.bss_cnt = 0;
 		pmlmeext->sitesurvey_res.channel_idx = 0;
@@ -6441,8 +6441,8 @@ u8 sitesurvey_cmd_hdl(struct adapter *padapter, u8 *pbuf)
 
 		/* issue null data if associating to the AP */
 		if (is_client_associated_to_ap(padapter) == true) {
+printk("---- WIFI DEBUG: Line 6444: Setting to SCAN_TXNULL\n");
 			pmlmeext->sitesurvey_res.state = SCAN_TXNULL;
-
 			issue_nulldata(padapter, NULL, 1, 3, 500);
 
 			bdelayscan = true;
@@ -6469,7 +6469,7 @@ u8 sitesurvey_cmd_hdl(struct adapter *padapter, u8 *pbuf)
 
 		val8 = 1; /* under site survey */
 		rtw_hal_set_hwreg(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
-
+printk("---- WIFI DEBUG: Line 6473: Setting to SCAN_PROCESS\n");
 		pmlmeext->sitesurvey_res.state = SCAN_PROCESS;
 	}
 
