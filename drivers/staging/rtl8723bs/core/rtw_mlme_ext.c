@@ -788,7 +788,6 @@ unsigned int OnProbeRsp(struct adapter *padapter, union recv_frame *precv_frame)
 
 unsigned int OnBeacon(struct adapter *padapter, union recv_frame *precv_frame)
 {
-printk("---- WIFI DEBUG: OnBeacon!\n");
 	int cam_idx;
 	struct sta_info *psta;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
@@ -812,7 +811,6 @@ printk("---- WIFI DEBUG: OnBeacon!\n");
 	}
 
 	if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS) {
-printk("---- WIFI DEBUG: OnBeacon: Scan in process...\n");
 		report_survey_event(padapter, precv_frame);
 		return _SUCCESS;
 	}
@@ -844,13 +842,10 @@ printk("---- WIFI DEBUG: OnBeacon: Scan in process...\n");
 			memset(pmlmeext->bcn_delay_ratio, 0, sizeof(pmlmeext->bcn_delay_ratio));
 
 			/* start auth */
-printk("---- WIFI DEBUG: OnBeacon: Going into start_clnt_auth...\n");
-
 			start_clnt_auth(padapter);
 
 			return _SUCCESS;
 		}
-printk("---- WIFI DEBUG: OnBeacon: Missed start_clnt_auth...\n");
 
 		if (((pmlmeinfo->state&0x03) == WIFI_FW_STATION_STATE) && (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS)) {
 			psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
