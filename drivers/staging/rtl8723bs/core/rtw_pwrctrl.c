@@ -22,28 +22,6 @@
 
 void _ips_enter(struct adapter *padapter)
 {
-	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-
-	pwrpriv->bips_processing = true;
-
-	/*  syn ips_mode with request */
-	pwrpriv->ips_mode = pwrpriv->ips_mode_req;
-
-	pwrpriv->ips_enter_cnts++;
-	DBG_871X("==>ips_enter cnts:%d\n", pwrpriv->ips_enter_cnts);
-
-	if (rf_off == pwrpriv->change_rfpwrstate) {
-		pwrpriv->bpower_saving = true;
-		DBG_871X_LEVEL(_drv_always_, "nolinked power save enter\n");
-
-		if (pwrpriv->ips_mode == IPS_LEVEL_2)
-			pwrpriv->bkeepfwalive = true;
-
-		rtw_ips_pwr_down(padapter);
-		pwrpriv->rf_pwrstate = rf_off;
-	}
-	pwrpriv->bips_processing = false;
-
 }
 
 void ips_enter(struct adapter *padapter)
@@ -60,29 +38,7 @@ void ips_enter(struct adapter *padapter)
 
 int _ips_leave(struct adapter *padapter)
 {
-	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-	int result = _SUCCESS;
-
-	if ((pwrpriv->rf_pwrstate == rf_off) && (!pwrpriv->bips_processing)) {
-		pwrpriv->bips_processing = true;
-		pwrpriv->change_rfpwrstate = rf_on;
-		pwrpriv->ips_leave_cnts++;
-		DBG_871X("==>ips_leave cnts:%d\n", pwrpriv->ips_leave_cnts);
-
-		result = rtw_ips_pwr_up(padapter);
-		if (result == _SUCCESS) {
-			pwrpriv->rf_pwrstate = rf_on;
-		}
-		DBG_871X_LEVEL(_drv_always_, "nolinked power save leave\n");
-
-		DBG_871X("==> ips_leave.....LED(0x%08x)...\n", rtw_read32(padapter, 0x4c));
-		pwrpriv->bips_processing = false;
-
-		pwrpriv->bkeepfwalive = false;
-		pwrpriv->bpower_saving = false;
-	}
-
-	return result;
+	return _SUCCESS;
 }
 
 int ips_leave(struct adapter *padapter)
